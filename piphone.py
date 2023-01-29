@@ -11,16 +11,19 @@ import wave
 # import piphonerecord
 
 
-Col0Pin = 21  # setting the pins to meaningful variables
+#Col0Pin = 21  # setting the pins to meaningful variables
+Col0Pin = 12
 Col1Pin = 20
 Col2Pin = 16
 
 Row0Pin = 26
-Row1Pin = 19
+#Row1Pin = 19
+Row1Pin = 5
 Row2Pin = 13
 Row3Pin = 6
 
-Btnpin = 18
+#Btnpin = 18
+Btnpin = 24
 
 
 '''delcare variables'''
@@ -56,20 +59,20 @@ mixer.init()
 
 
 ''' creating sound objects '''
-welcomemessage = mixer.Sound('/home/pi/PiPhoneAudioFiles/thankyou.wav')
-dialtone = mixer.Sound('/home/pi/PiPhoneAudioFiles/350hz+440hz(dialtone).wav')
-dial1 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1209hz+697hz(#1).wav')
-dial2 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1336hz+697hz(#2).wav')
-dial3 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1477hz+697hz(#3).wav')
-dial4 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1209hz+770hz(#4).wav')
-dial5 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1336hz+770hz(#5).wav')
-dial6 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1477hz+770hz(#6).wav')
-dial7 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1209hz+852hz(#7).wav')
-dial8 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1336hz+852hz(#8).wav')
-dial9 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1477hz+852hz(#9).wav')
-dial0 = mixer.Sound('/home/pi/PiPhoneAudioFiles/1336hz+941hz(#0).wav')
-dialstar = mixer.Sound('/home/pi/PiPhoneAudioFiles/1209hz+941hz(*).wav')
-diallb = mixer.Sound('/home/pi/PiPhoneAudioFiles/1477hz+941hz(#).wav')
+welcomemessage = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/thankyou.wav')
+dialtone = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/350hz+440hz(dialtone).wav')
+dial1 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+697hz(#1).wav')
+dial2 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1336hz+697hz(#2).wav')
+dial3 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1477hz+697hz(#3).wav')
+dial4 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+770hz(#4).wav')
+dial5 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1336hz+770hz(#5).wav')
+dial6 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1477hz+770hz(#6).wav')
+dial7 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+852hz(#7).wav')
+dial8 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1336hz+852hz(#8).wav')
+dial9 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1477hz+852hz(#9).wav')
+dial0 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1336hz+941hz(#0).wav')
+dialstar = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+941hz(*).wav')
+diallb = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1477hz+941hz(#).wav')
 
 
 def setup(): #  initial set up of pins and parameters
@@ -260,18 +263,18 @@ def evaluate_typed_number():
 		typednumber = ''
 		print('TYPED NUMBER 263')
 		randfiles = []
-		files = os.listdir('/home/pi/AudioRecordings')
+		files = os.listdir('/home/pi/PiPhoneAudioMessages')
 		randfiles = [i for i in files]
 		print(randfiles)
 		ri = random.randint(0, len(randfiles) - 1)  # random index
-		randomvoicemail = mixer.Sound('/home/pi/AudioRecordings/' + files[ri])
+		randomvoicemail = mixer.Sound('/home/pi/PiPhoneAudioMessages/' + files[ri])
 		randomvoicemail.play()
 
 
 def record_and_save():
 	now = datetime.now()
 	currenttime = now.strftime("%m-%d-%Y %H:%M:%S")
-	filename = '/home/pi/AudioRecordings/{}.wav'.format(currenttime)
+	filename = '/home/pi/PiPhoneAudioMessages/{}.wav'.format(currenttime)
 	
 	# initialize PyAudio object
 	p = pyaudio.PyAudio()
@@ -281,7 +284,7 @@ def record_and_save():
 	channels=channels,
 	rate=sample_rate,
 	input=True,
-#	output=True,  # output should reflect pyaudio output to speakers, not needed
+	output=True,  # output should reflect pyaudio output to speakers, not needed, may be needed?
 	frames_per_buffer=chunk)
 	frames = []
 	
