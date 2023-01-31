@@ -54,11 +54,14 @@ sample_rate = 48000 # this was the default for the device after digging into it,
 
 
 '''initializing pygame sound mixer'''
-mixer.pre_init(devicename='KEPULU USB AUDIO Analog Stereo')
+#mixer.pre_init(devicename='KEPULU USB AUDIO Analog Stereo')
+# omitting pre_init uses default which fortunately is the hifi DAC
 mixer.init()
 
 
 ''' creating sound objects '''
+# keep in mind, pygame mixer can only play uncompressed wav and ogg files
+
 welcomemessage = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/thankyou.wav')
 dialtone = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/350hz+440hz(dialtone).wav')
 dial1 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+697hz(#1).wav')
@@ -248,14 +251,6 @@ def rowcheck(channel):
 #			print("message recorded")
 
 
-''' 
-this would be the place to evaluate typed numbers. Number detection
-currently appears to work. However, I was unable to load audio files 
-that were recorded using the arecord feature. I believe this is due to
-pygame mixers inability to read anything other than ogg and uncompressed
-wav files. I assume the recordings I have are compressed wav files
-'''
-
 
 def evaluate_typed_number():
 	global typednumber
@@ -284,7 +279,7 @@ def record_and_save():
 	channels=channels,
 	rate=sample_rate,
 	input=True,
-	output=True,  # output should reflect pyaudio output to speakers, not needed, may be needed?
+#	output=True,  # output should reflect pyaudio output to speakers
 	frames_per_buffer=chunk)
 	frames = []
 	

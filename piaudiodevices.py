@@ -33,13 +33,13 @@ import pygame._sdl2 as sdl2
 pygame.mixer.init()
 
 pygame.init()
-is_capture = 0  # zero to request playback devices, non-zero to request recording devices
+playback_devices = 0  # zero to request playback devices, non-zero to request recording devices
 #num = sdl2.get_num_audio_devices(is_capture)
-nums = sdl2.get_audio_device_names(is_capture)
+nums = sdl2.get_audio_device_names(playback_devices)
 #names = [str(sdl2.get_audio_device_name(i, is_capture), encoding="utf-8") for i in range(nums)]
 names = []
 for i in range(len(nums)):
-	names.append(str(sdl2.get_audio_device_names(is_capture)))
+	names.append(str(sdl2.get_audio_device_names(playback_devices)))
 #names = [str(sdl2.get_audio_device_names
 print("\n".join(names))
 #print("got this far")
