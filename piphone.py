@@ -8,6 +8,7 @@ import random
 import os
 import pyaudio
 import wave
+import shutil
 # import piphonerecord
 
 
@@ -62,7 +63,7 @@ mixer.init()
 ''' creating sound objects '''
 # keep in mind, pygame mixer can only play uncompressed wav and ogg files
 
-welcomemessage = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/thankyou.wav')
+welcomemessage = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/laughingthankyou_v2.0.wav')
 dialtone = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/350hz+440hz(dialtone).wav')
 dial1 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1209hz+697hz(#1).wav')
 dial2 = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/1336hz+697hz(#2).wav')
@@ -262,14 +263,20 @@ def evaluate_typed_number():
 		randfiles = [i for i in files]
 		print(randfiles)
 		ri = random.randint(0, len(randfiles) - 1)  # random index
-		randomvoicemail = mixer.Sound('/home/pi/PiPhoneAudioMessages/' + files[ri])
+		try:
+			randomvoicemail = mixer.Sound('/home/pi/PiPhoneAudioMessages/' + files[ri])
+		except:
+			randomvoicemail = mixer.Sound('/home/pi/PiPhone/PiPhoneAudioFiles/mixerloaderror.wav')
 		randomvoicemail.play()
 
 
 def record_and_save():
 	now = datetime.now()
-	currenttime = now.strftime("%m-%d-%Y %H:%M:%S")
+	currenttime = now.strftime("%m-%d-%y H%HM%MS%S")
 	filename = '/home/pi/PiPhoneAudioMessages/{}.wav'.format(currenttime)
+	copyfilename = '/media/pi/PiPhoneShar/PiPhoneAudioMessages/{}.wav'.format(currenttime)
+#	PhonePath = "/home/pi/PiPhoneAudioMessages"
+#	BackupPath = "/media/pi/PiPhoneShar/PiPhoneAudioMessages"
 	
 	# initialize PyAudio object
 	p = pyaudio.PyAudio()
@@ -297,7 +304,9 @@ def record_and_save():
 	p.terminate()
 	#save audio file
 	# open the file in 'write bytes' mode
+	
 	wf = wave.open(filename, "wb")
+	#wf = wave.open(copyfilename, "wb")
 
 	#set the chnnels
 	wf.setnchannels(channels)
@@ -314,6 +323,29 @@ def record_and_save():
 
 	# close the file
 	wf.close()
+	
+	try:
+		shutil.copy(filename, '/media/USBFLASHNAS/Audiofiles')
+	except:
+		print('error with saving audio backup')
+		
+	#shutil.copy('/home/pi/PiPhoneAudioMessages/{}.wav'.format(currenttime), '/media') # this works, but I can't make it go 'deeper' than one folder in
+	#shutil.copy(filename, '/media/USBFLASHNAS/Audiofiles') # this one seems to work after several permission style changes
+	#shutil.copy(filename, '\\media') # this creates a file \media in the CWD
+	#shutil.copy(filename, '/media/pi) #errno 13
+#	shutil.copy(filename, '/home/pi/PiPhone') # this actually works so seomthing is wrong with writing to the USB for some reason
+	#shutil.copy(filename, '/media/pi/') # errno 13 permission denied
+	#shutil.copy(filename, r'/media/pi') # errno 13 permission denied
+	#shutil.copy('/home/pi/PiPhoneAudioMessages/{}.wav'.format(currenttime), '/media/pi') # errno 13 permission denied
+	#shutil.copy(os.path.join(
+	#shutil.copyfile(filename, copyfilename) # errno 22 invalid argument, seems upset with destination
+	#shutil.copyfile('/home/pi/PiPhoneAudioMessages/{}.wav'.format(currenttime), '/media/pi/PiPhoneShar/PiPhoneAudioMessages/{}.wav'.format(currenttime))
+	#same as above error
+	
+	#except:
+	#	print('error while making audio backup')
+		
+	
 
 
 

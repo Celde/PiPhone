@@ -4,7 +4,7 @@ import pygame
 
 
 #pygame.mixer.pre_init(devicename='USB-Audio - KEPULU USB AUDIO')
-pygame.mixer.pre_init(devicename='KEPULU USB AUDIO Analog Stereo')
+#pygame.mixer.pre_init(devicename='KEPULU USB AUDIO Analog Stereo')
 pygame.mixer.init()
 #pygame.init()
 
@@ -19,7 +19,13 @@ while pygame.mixer.get_busy():
 '''
 
 #sound = pygame.mixer.Sound('recorded.wav')
-sound = pygame.mixer.Sound('/home/pi/AudioRecordings/2023-01-19-17-50-16converted.wav')
+try:
+	sound = pygame.mixer.Sound('/home/pi/OriginalPiPhoneMessages/toolong.wav')
+except:
+	print('file was likely too long and did not open')
+	sound = pygame.mixer.Sound('/home/pi/OriginalPiPhoneMessages/perfectintro.wav')
 sound.play()
+
 while pygame.mixer.get_busy():
-	print('playing sound hopefully')
+	sleep(0.1)
+	#print('playing sound hopefully')
